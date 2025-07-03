@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cool Website Games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #222;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        #menu, #tictactoe, #pong {
+            margin-top: 40px;
+            display: none;
+        }
+        #menu {
+            display: block;
+        }
+        button, .ttt-cell {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        .ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            grid-template-rows: repeat(3, 80px);
+            gap: 5px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        .ttt-cell {
+            width: 80px;
+            height: 80px;
+            background: #333;
+            color: #fff;
+            font-size: 2.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .ttt-cell:hover {
+            background: #444;
+        }
+        #pong-canvas {
+            background: #000;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #fff;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <h1>Cool Website Games</h1>
+        <p>Choose a game:</p>
+        <button onclick="showGame('tictactoe')">Tic-Tac-Toe</button>
+        <button onclick="showGame('pong')">Ping Pong</button>
+    </div>
+
+    <!-- Tic-Tac-Toe -->
+    <div id="tictactoe">
+        <h2>Tic Tac Toe: Human vs Computer</h2>
+        <div class="ttt-board" id="ttt-board"></div>
+        <div id="ttt-result"></div>
+        <button onclick="resetTicTacToe()">Restart</button>
+        <button onclick="backToMenu()">Back to Menu</button>
+    </div>
+
+    <!-- Pong -->
+    <div id="pong">
+        <h2>Ping Pong - Human vs Computer</h2>
+        <canvas id="pong-canvas" width="800" height="600"></canvas>
+        <div id="pong-instructions">
+            <p>Use UP/DOWN arrows or W/S keys to move</p>
+            <p>First to 10 points wins!</p>
+            <p>Press ESC to quit</p>
+        </div>
+        <button onclick="backToMenu()">Back to Menu</button>
+    </div>
+
+    <script>
+        // Menu navigation
+        function showGame(game) {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('tictactoe').style.display = (game === 'tictactoe') ? 'block' : 'none';
+            document.getElementById('pong').style.display = (game === 'pong') ? 'block' : 'none';
+            if (game === 'pong') startPong();
+            if (game === 'tictactoe') resetTicTacToe();
+        }
+        function backToMenu() {
+            document.getElementById('menu').style.display = 'block';
+            document.getElementById('tictactoe').style.display = 'none';
+            document.getElementById('pong').style.display = 'none';
+            stopPong();
+        }
+
+        // --- Tic-Tac-Toe ---
+        let tttBoard, tttResult, tttCells, tttGameActive, tttCurrentPlayer;
+
+        function resetTicTacToe() {
+            tttBoard = document.getElementById('ttt-board');
+            tttResult = document.getElementById('ttt-result');
+            tttBoard.innerHTML = '';
+            tttCells = [];
+            tttGameActive = true;
+            tttCurrentPlayer = 'X';
+            tttResult.textContent = "Your turn (X)";
+            for (let i = 0; i < 3; i++) {
+                tttCells[i] = [];
+                for (let j = 0; j < 3; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'ttt-cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    cell.onclick = () => tttClick(i, j);
+                    tttBoard.appendChild(cell);
+                    tttCells[i][j] = cell;
+                }
+            }
+        }
+
+        function tttClick(row, col) {
+            if (!tttGameActive || tttCurrentPlayer !== 'X') return;
+            if (tttCells[row][col].textContent === '') {
+                tttCells[row][col].textContent = 'X';
+                if (tttCheckWinner('X')) {
+                    tttResult.textContent = "You win!";
+                    tttGameActive = false;
+                    return;
+                }
+                if (tttCheckDraw()) {
+                    tttResult.textContent = "It's a draw!";
+                    tttGameActive = false;
+                    return;
+                }
+                tttCurrentPlayer = 'O';
+                tttResult.textContent = "Computer's turn...";
+                setTimeout(tttComputerMove, 500);
+            }
+        }
+
+        function tttComputerMove() {
+            if (!tttGameActive) return;
+            let empty = [];
+            for (let i = 0; i < 3; i++)
+                for (let j = 0; j < 3; j++)
+                    if (tttCells[i][j].textContent === '') empty.push([i, j]);
+            if (empty.length === 0) return;
+            let [row, col] = empty[Math.floor(Math.random() * empty.length)];
+            tttCells[row][col].textContent = 'O';
+            if (tttCheckWinner('O')) {
+                tttResult.textContent = "Computer wins!";
+                tttGameActive = false;
+                return;
+            }
+            if (tttCheckDraw()) {
+                tttResult.textContent = "It's a draw!";
+                tttGameActive = false;
+                return;
+            }
+            tttCurrentPlayer = 'X';
+            tttResult.textContent = "Your turn (X)";
+        }
+
+        function tttCheckWinner(player) {
+            for (let i = 0; i < 3; i++)
+                if ([0,1,2].every(j => tttCells[i][j].textContent === player)) return true;
+            for (let j = 0; j < 3; j++)
+                if ([0,1,2].every(i => tttCells[i][j].textContent === player)) return true;
+            if ([0,1,2].every(i => tttCells[i][i].textContent === player)) return true;
+            if ([0,1,2].every(i => tttCells[i][2-i].textContent === player)) return true;
+            return false;
+        }
+
+        function tttCheckDraw() {
+            return [].concat(...tttCells).every(cell => cell.textContent !== '');
+        }
+
+        // --- Pong Game ---
+        let pongRunning = false, pongAnimationId;
+        let pongCanvas, pongCtx;
+        let paddleWidth = 15, paddleHeight = 90, ballSize = 15;
+        let playerPaddle, computerPaddle, ball;
+        let playerScore, computerScore;
+        let paddleSpeed = 6, ballSpeed = 5;
+        let keysPressed = {};
+
+        function startPong() {
+            pongCanvas = document.getElementById('pong-canvas');
+            pongCtx = pongCanvas.getContext('2d');
+            playerPaddle = { x: 30, y: pongCanvas.height/2 - paddleHeight/2, color: '#0090ff' };
+            computerPaddle = { x: pongCanvas.width-30-paddleWidth, y: pongCanvas.height/2 - paddleHeight/2, color: '#ff6464' };
+            ball = { x: pongCanvas.width/2, y: pongCanvas.height/2, vx: ballSpeed * (Math.random()<0.5?-1:1), vy: ballSpeed * (Math.random()<0.5?-1:1) };
+            playerScore = 0; computerScore = 0;
+            pongRunning = true;
+            window.addEventListener('keydown', pongKeyDown);
+            window.addEventListener('keyup', pongKeyUp);
+            pongLoop();
+        }
+
+        function stopPong() {
+            pongRunning = false;
+            window.removeEventListener('keydown', pongKeyDown);
+            window.removeEventListener('keyup', pongKeyUp);
+            cancelAnimationFrame(pongAnimationId);
+        }
+
+        function pongKeyDown(e) {
+            keysPressed[e.key.toLowerCase()] = true;
+            if (e.key === "Escape") backToMenu();
+            if (e.key === " " && (playerScore >= 10 || computerScore >= 10)) startPong();
+        }
+        function pongKeyUp(e) {
+            keysPressed[e.key.toLowerCase()] = false;
+        }
+
+        function pongLoop() {
+            if (!pongRunning) return;
+            // Move player paddle
+            if (keysPressed['arrowup'] || keysPressed['w']) playerPaddle.y -= paddleSpeed;
+            if (keysPressed['arrowdown'] || keysPressed['s']) playerPaddle.y += paddleSpeed;
+            playerPaddle.y = Math.max(0, Math.min(pongCanvas.height-paddleHeight, playerPaddle.y));
+            // Move computer paddle (simple AI)
+            let paddleCenter = computerPaddle.y + paddleHeight/2;
+            if (Math.abs(paddleCenter - ball.y) > 20) {
+                if (paddleCenter < ball.y) computerPaddle.y += paddleSpeed;
+                else computerPaddle.y -= paddleSpeed;
+            }
+            computerPaddle.y = Math.max(0, Math.min(pongCanvas.height-paddleHeight, computerPaddle.y));
+            // Move ball
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+            // Ball collision with top/bottom
+            if (ball.y <= 0 || ball.y + ballSize >= pongCanvas.height) ball.vy = -ball.vy;
+            // Ball collision with paddles
+            if (ball.x <= playerPaddle.x + paddleWidth &&
+                    ball.y + ballSize >= playerPaddle.y &&
+                    ball.y <= playerPaddle.y + paddleHeight) {
+                if (ball.vx < 0) {
+                    ball.vx = -ball.vx;
+                    let hitPos = ((ball.y + ballSize/2) - (playerPaddle.y + paddleHeight/2)) / paddleHeight;
+                    ball.vy += hitPos * 6;
+                }
+            }
+            if (ball.x + ballSize >= computerPaddle.x &&
+                    ball.y + ballSize >= computerPaddle.y &&
+                    ball.y <= computerPaddle.y + paddleHeight) {
+                if (ball.vx > 0) {
+                    ball.vx = -ball.vx;
+                    let hitPos = ((ball.y + ballSize/2) - (computerPaddle.y + paddleHeight/2)) / paddleHeight;
+                    ball.vy += hitPos * 6;
+                }
+            }
+            // Scoring
+            if (ball.x < 0) {
+                computerScore++;
+                pongResetBall();
+            }
+            if (ball.x > pongCanvas.width) {
+                playerScore++;
+                pongResetBall();
+            }
+            // Draw everything
+            pongDraw();
+            // Game over?
+            if (playerScore >= 10 || computerScore >= 10) {
+                pongDrawGameOver();
+                pongRunning = false;
+                return;
+            }
+            pongAnimationId = requestAnimationFrame(pongLoop);
+        }
+
+        function pongResetBall() {
+            ball.x = pongCanvas.width/2;
+            ball.y = pongCanvas.height/2;
+            ball.vx = ballSpeed * (Math.random()<0.5?-1:1);
+            ball.vy = ballSpeed * (Math.random()<0.5?-1:1);
+        }
+
+        function pongDraw() {
+            pongCtx.clearRect(0, 0, pongCanvas.width, pongCanvas.height);
+            // Center line
+            pongCtx.strokeStyle = "#fff";
+            pongCtx.setLineDash([10, 10]);
+            pongCtx.beginPath();
+            pongCtx.moveTo(pongCanvas.width/2, 0);
+            pongCtx.lineTo(pongCanvas.width/2, pongCanvas.height);
+            pongCtx.stroke();
+            pongCtx.setLineDash([]);
+            // Paddles
+            pongCtx.fillStyle = playerPaddle.color;
+            pongCtx.fillRect(playerPaddle.x, playerPaddle.y, paddleWidth, paddleHeight);
+            pongCtx.fillStyle = computerPaddle.color;
+            pongCtx.fillRect(computerPaddle.x, computerPaddle.y, paddleWidth, paddleHeight);
+            // Ball
+            pongCtx.fillStyle = "#fff";
+            pongCtx.beginPath();
+            pongCtx.ellipse(ball.x + ballSize/2, ball.y + ballSize/2, ballSize/2, ballSize/2, 0, 0, 2*Math.PI);
+            pongCtx.fill();
+            // Scores
+            pongCtx.font = "74px Arial";
+            pongCtx.fillStyle = "#fff";
+            pongCtx.fillText(playerScore, pongCanvas.width/4, 80);
+            pongCtx.fillText(computerScore, 3*pongCanvas.width/4, 80);
+        }
+
+        function pongDrawGameOver() {
+            // Overlay
+            pongCtx.fillStyle = "rgba(0,0,0,0.7)";
+            pongCtx.fillRect(0, 0, pongCanvas.width, pongCanvas.height);
+            // Winner
+            pongCtx.font = "74px Arial";
+            pongCtx.fillStyle = "#fff";
+            let winner = playerScore >= 10 ? "You Win!" : "Computer Wins!";
+            pongCtx.textAlign = "center";
+            pongCtx.fillText(winner, pongCanvas.width/2, pongCanvas.height/2);
+            pongCtx.font = "36px Arial";
+            pongCtx.fillText("Press SPACE to restart or ESC to quit", pongCanvas.width/2, pongCanvas.height/2 + 60);
+            pongCtx.textAlign = "start";
+        }
+    </script>
+</body>
+</html>
