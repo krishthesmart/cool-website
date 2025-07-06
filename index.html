@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Cool Website Games</title>
     <style>
         body {
@@ -11,8 +12,9 @@
             text-align: center;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
         }
-        #menu, #tictactoe, #pong {
+        #menu, #tictactoe, #pong, #connectfour, #battleship, #memorymatch {
             margin-top: 40px;
             display: none;
         }
@@ -58,6 +60,242 @@
         .hidden {
             display: none !important;
         }
+        /* Connect Four styles */
+        #connectfour .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        #game-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 60px);
+            grid-template-rows: repeat(6, 60px);
+            gap: 5px;
+            margin-bottom: 15px;
+            background: #FF0000;
+            padding: 5px;
+            border-radius: 8px;
+        }
+        #connectfour button {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            background: #444;
+            border: 2px solid #FF0000;
+            border-radius: 4px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        #connectfour button:hover {
+            background: #555;
+            transform: scale(1.05);
+        }
+        #connectfour button:disabled {
+            background: #222;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        #status {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        #connectfour .cf-large-btn {
+            width: 200px;
+            height: 60px;
+            font-size: 1.5em;
+            padding: 16px 0;
+            margin: 14px 8px;
+            border-radius: 10px;
+            background: #555;
+            color: #fff;
+            border: none;
+            transition: background 0.2s, transform 0.2s;
+            cursor: pointer;
+            display: inline-block;
+        }
+        #connectfour .cf-large-btn:hover {
+            background: #777;
+            transform: scale(1.06);
+        }
+        #connectfour button[data-piece="X"],
+        #connectfour button[data-piece="O"] {
+            color: #00FF00;
+        }
+        #connectfour {
+            background: #0000FF;
+            color: #fff;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 40px;
+        }
+        /* Battleship styles */
+        #battleship h2 {
+            margin-bottom: 12px;
+        }
+        .boards-container {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+        .board-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .board-label {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 38px);
+            grid-template-rows: repeat(8, 38px);
+            gap: 3px;
+            background: #111;
+            border-radius: 8px;
+            padding: 5px;
+        }
+        .cell {
+            width: 38px;
+            height: 38px;
+            background: #333;
+            border-radius: 4px;
+            font-size: 1.5em;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s, color 0.18s;
+        }
+        .cell.ship {
+            background: #2679ff;
+        }
+        .cell.hit {
+            background: #e74c3c;
+            color: #fff;
+            font-weight: bold;
+            animation: pop 0.28s;
+        }
+        .cell.miss {
+            background: #888;
+            color: #fff;
+            font-weight: bold;
+            animation: pop 0.18s;
+        }
+        .cell.target {
+            cursor: pointer;
+        }
+        .cell.sunk {
+            background: #2ecc40;
+            color: #fff;
+        }
+        @keyframes pop {
+            0% { transform: scale(1);}
+            50% { transform: scale(1.25);}
+            100% { transform: scale(1);}
+        }
+        #battleship-status {
+            font-size: 1.15em;
+            margin: 16px 0 12px 0;
+            min-height: 1.5em;
+        }
+        #battleship-restart {
+            font-size: 1.1em;
+            padding: 10px 34px;
+            margin: 16px 6px 8px 6px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #0090ff;
+            color: #fff;
+            transition: background 0.2s;
+        }
+        #battleship-restart:hover {
+            background: #0077cc;
+        }
+        @media (max-width: 900px) {
+            .boards-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 18px;
+            }
+        }
+        /* Memory Match styles */
+        #memorymatch {
+            display: none;
+        }
+        #memorymatch h2 {
+            margin-top: 30px;
+            margin-bottom: 12px;
+        }
+        #memory-board {
+            display: grid;
+            grid-template-columns: repeat(4, 70px);
+            grid-template-rows: repeat(4, 70px);
+            gap: 15px;
+            justify-content: center;
+            margin: 24px auto 16px auto;
+            max-width: 370px;
+        }
+        .card {
+            background: #444;
+            color: #444;
+            font-size: 2.2em;
+            border-radius: 12px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s, transform 0.1s;
+            height: 70px;
+            width: 70px;
+        }
+        .card.flipped, .card.matched {
+            background: #00bfff;
+            color: #fff;
+            cursor: default;
+            transform: scale(1.08);
+        }
+        .card.matched {
+            background: #2ecc40;
+            color: #fff;
+            cursor: default;
+            animation: pop 0.3s;
+        }
+        @keyframes pop {
+            0% { transform: scale(1.08);}
+            50% { transform: scale(1.25);}
+            100% { transform: scale(1.08);}
+        }
+        #status {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            min-height: 1.6em;
+        }
+        #restart-memorymatch {
+            font-size: 1.1em;
+            padding: 10px 34px;
+            margin-top: 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #0090ff;
+            color: #fff;
+            transition: background 0.2s;
+        }
+        #restart-memorymatch:hover {
+            background: #0077cc;
+        }
+        #moves {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
@@ -65,7 +303,10 @@
         <h1>Cool Website Games</h1>
         <p>Choose a game:</p>
         <button onclick="showGame('tictactoe')">Tic-Tac-Toe</button>
+        <button onclick="showGame('memorymatch')">Memory Match</button>
         <button onclick="showGame('pong')">Ping Pong</button>
+        <button onclick="showGame('connectfour')">Connect Four</button>
+        <button onclick="showGame('battleship')">Battleship</button>
     </div>
 
     <!-- Tic-Tac-Toe -->
@@ -74,6 +315,16 @@
         <div class="ttt-board" id="ttt-board"></div>
         <div id="ttt-result"></div>
         <button onclick="resetTicTacToe()">Restart</button>
+        <button onclick="backToMenu()">Back to Menu</button>
+    </div>
+
+    <!-- Memory Match -->
+    <div id="memorymatch">
+        <h2>Memory Match Game</h2>
+        <div id="status"></div>
+        <div id="moves"></div>
+        <div id="memory-board"></div>
+        <button id="restart-memorymatch">Restart</button>
         <button onclick="backToMenu()">Back to Menu</button>
     </div>
 
@@ -89,25 +340,150 @@
         <button onclick="backToMenu()">Back to Menu</button>
     </div>
 
+    <!-- Connect Four -->
+    <div id="connectfour">
+        <div class="container">
+            <h2>Connect Four: Human vs Computer</h2>
+            <div id="game-grid"></div>
+            <div id="status">Your turn (O)</div>
+            <div>
+                <button id="restart" class="cf-large-btn">Restart</button>
+                <button onclick="backToMenu()" class="cf-large-btn">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Battleship -->
+    <div id="battleship">
+        <h2>Battleship</h2>
+        <div id="battleship-status"></div>
+        <div class="boards-container">
+            <div class="board-wrap">
+                <div class="board-label">Your Board</div>
+                <div id="player-board" class="board"></div>
+            </div>
+            <div class="board-wrap">
+                <div class="board-label">Computer Board</div>
+                <div id="computer-board" class="board"></div>
+            </div>
+        </div>
+        <button id="battleship-restart">Restart</button>
+        <button onclick="backToMenu()">Back to Menu</button>
+    </div>
+
     <script>
         // Menu navigation
         function showGame(game) {
             document.getElementById('menu').style.display = 'none';
             document.getElementById('tictactoe').style.display = (game === 'tictactoe') ? 'block' : 'none';
+            document.getElementById('memorymatch').style.display = (game === 'memorymatch') ? 'block' : 'none';
             document.getElementById('pong').style.display = (game === 'pong') ? 'block' : 'none';
+            document.getElementById('connectfour').style.display = (game === 'connectfour') ? 'block' : 'none';
+            document.getElementById('battleship').style.display = (game === 'battleship') ? 'block' : 'none';
             if (game === 'pong') startPong();
+            else stopPong();
             if (game === 'tictactoe') resetTicTacToe();
+            if (game === 'memorymatch') createMemoryBoard();
+            if (game === 'connectfour') initConnectFour();
+            if (game === 'battleship') startBattleship();
         }
         function backToMenu() {
             document.getElementById('menu').style.display = 'block';
             document.getElementById('tictactoe').style.display = 'none';
+            document.getElementById('memorymatch').style.display = 'none';
             document.getElementById('pong').style.display = 'none';
+            document.getElementById('connectfour').style.display = 'none';
+            document.getElementById('battleship').style.display = 'none';
             stopPong();
         }
 
+        // --- Memory Match ---
+        const symbols = ['🐶','🐱','🦊','🐸','🐵','🐼','🦁','🐷'];
+        let board = [];
+        let firstCard = null, secondCard = null;
+        let lockBoard = false;
+        let matchedCount = 0;
+        let moves = 0;
+        function shuffle(array) {
+            for(let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        function createMemoryBoard() {
+            const memoryBoard = document.getElementById('memory-board');
+            memoryBoard.innerHTML = '';
+            let cards = symbols.concat(symbols);
+            shuffle(cards);
+            board = [];
+            matchedCount = 0;
+            moves = 0;
+            firstCard = null;
+            secondCard = null;
+            lockBoard = false;
+            updateStatus('');
+            updateMoves();
+            for(let i=0; i<cards.length; i++) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.symbol = cards[i];
+                card.dataset.index = i;
+                card.innerText = cards[i];
+                card.onclick = () => flipCard(card);
+                memoryBoard.appendChild(card);
+                board.push(card);
+                setTimeout(() => { card.classList.remove('flipped'); card.innerText = ''; }, 800);
+                setTimeout(() => { card.classList.remove('matched'); }, 800);
+                card.classList.add('flipped');
+            }
+        }
+        function flipCard(card) {
+            if(lockBoard) return;
+            if(card.classList.contains('flipped') || card.classList.contains('matched')) return;
+            card.classList.add('flipped');
+            card.innerText = card.dataset.symbol;
+            if(!firstCard) {
+                firstCard = card;
+                return;
+            }
+            if(card === firstCard) return;
+            secondCard = card;
+            moves++;
+            updateMoves();
+            lockBoard = true;
+            if(firstCard.dataset.symbol === secondCard.dataset.symbol) {
+                firstCard.classList.add('matched');
+                secondCard.classList.add('matched');
+                matchedCount += 2;
+                lockBoard = false;
+                firstCard = null;
+                secondCard = null;
+                if(matchedCount === board.length) {
+                    updateStatus(`🎉 You won in ${moves} moves!`);
+                }
+            } else {
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+                    firstCard.innerText = '';
+                    secondCard.innerText = '';
+                    lockBoard = false;
+                    firstCard = null;
+                    secondCard = null;
+                }, 900);
+            }
+        }
+        function updateStatus(msg) {
+            document.getElementById('status').innerText = msg;
+        }
+        function updateMoves() {
+            document.getElementById('moves').innerText = `Moves: ${moves}`;
+        }
+        document.getElementById('restart-memorymatch').onclick = createMemoryBoard;
+
         // --- Tic-Tac-Toe ---
         let tttBoard, tttResult, tttCells, tttGameActive, tttCurrentPlayer;
-
         function resetTicTacToe() {
             tttBoard = document.getElementById('ttt-board');
             tttResult = document.getElementById('ttt-result');
@@ -129,7 +505,6 @@
                 }
             }
         }
-
         function tttClick(row, col) {
             if (!tttGameActive || tttCurrentPlayer !== 'X') return;
             if (tttCells[row][col].textContent === '') {
@@ -149,7 +524,6 @@
                 setTimeout(tttComputerMove, 500);
             }
         }
-
         function tttComputerMove() {
             if (!tttGameActive) return;
             let empty = [];
@@ -172,7 +546,6 @@
             tttCurrentPlayer = 'X';
             tttResult.textContent = "Your turn (X)";
         }
-
         function tttCheckWinner(player) {
             for (let i = 0; i < 3; i++)
                 if ([0,1,2].every(j => tttCells[i][j].textContent === player)) return true;
@@ -182,7 +555,6 @@
             if ([0,1,2].every(i => tttCells[i][2-i].textContent === player)) return true;
             return false;
         }
-
         function tttCheckDraw() {
             return [].concat(...tttCells).every(cell => cell.textContent !== '');
         }
@@ -195,7 +567,6 @@
         let playerScore, computerScore;
         let paddleSpeed = 6, ballSpeed = 5;
         let keysPressed = {};
-
         function startPong() {
             pongCanvas = document.getElementById('pong-canvas');
             pongCtx = pongCanvas.getContext('2d');
@@ -208,14 +579,12 @@
             window.addEventListener('keyup', pongKeyUp);
             pongLoop();
         }
-
         function stopPong() {
             pongRunning = false;
             window.removeEventListener('keydown', pongKeyDown);
             window.removeEventListener('keyup', pongKeyUp);
-            cancelAnimationFrame(pongAnimationId);
+            if (pongAnimationId) cancelAnimationFrame(pongAnimationId);
         }
-
         function pongKeyDown(e) {
             keysPressed[e.key.toLowerCase()] = true;
             if (e.key === "Escape") backToMenu();
@@ -224,26 +593,20 @@
         function pongKeyUp(e) {
             keysPressed[e.key.toLowerCase()] = false;
         }
-
         function pongLoop() {
             if (!pongRunning) return;
-            // Move player paddle
             if (keysPressed['arrowup'] || keysPressed['w']) playerPaddle.y -= paddleSpeed;
             if (keysPressed['arrowdown'] || keysPressed['s']) playerPaddle.y += paddleSpeed;
             playerPaddle.y = Math.max(0, Math.min(pongCanvas.height-paddleHeight, playerPaddle.y));
-            // Move computer paddle (simple AI)
             let paddleCenter = computerPaddle.y + paddleHeight/2;
             if (Math.abs(paddleCenter - ball.y) > 20) {
                 if (paddleCenter < ball.y) computerPaddle.y += paddleSpeed;
                 else computerPaddle.y -= paddleSpeed;
             }
             computerPaddle.y = Math.max(0, Math.min(pongCanvas.height-paddleHeight, computerPaddle.y));
-            // Move ball
             ball.x += ball.vx;
             ball.y += ball.vy;
-            // Ball collision with top/bottom
             if (ball.y <= 0 || ball.y + ballSize >= pongCanvas.height) ball.vy = -ball.vy;
-            // Ball collision with paddles
             if (ball.x <= playerPaddle.x + paddleWidth &&
                     ball.y + ballSize >= playerPaddle.y &&
                     ball.y <= playerPaddle.y + paddleHeight) {
@@ -262,7 +625,6 @@
                     ball.vy += hitPos * 6;
                 }
             }
-            // Scoring
             if (ball.x < 0) {
                 computerScore++;
                 pongResetBall();
@@ -271,9 +633,7 @@
                 playerScore++;
                 pongResetBall();
             }
-            // Draw everything
             pongDraw();
-            // Game over?
             if (playerScore >= 10 || computerScore >= 10) {
                 pongDrawGameOver();
                 pongRunning = false;
@@ -281,17 +641,14 @@
             }
             pongAnimationId = requestAnimationFrame(pongLoop);
         }
-
         function pongResetBall() {
             ball.x = pongCanvas.width/2;
             ball.y = pongCanvas.height/2;
             ball.vx = ballSpeed * (Math.random()<0.5?-1:1);
             ball.vy = ballSpeed * (Math.random()<0.5?-1:1);
         }
-
         function pongDraw() {
             pongCtx.clearRect(0, 0, pongCanvas.width, pongCanvas.height);
-            // Center line
             pongCtx.strokeStyle = "#fff";
             pongCtx.setLineDash([10, 10]);
             pongCtx.beginPath();
@@ -299,28 +656,22 @@
             pongCtx.lineTo(pongCanvas.width/2, pongCanvas.height);
             pongCtx.stroke();
             pongCtx.setLineDash([]);
-            // Paddles
             pongCtx.fillStyle = playerPaddle.color;
             pongCtx.fillRect(playerPaddle.x, playerPaddle.y, paddleWidth, paddleHeight);
             pongCtx.fillStyle = computerPaddle.color;
             pongCtx.fillRect(computerPaddle.x, computerPaddle.y, paddleWidth, paddleHeight);
-            // Ball
             pongCtx.fillStyle = "#fff";
             pongCtx.beginPath();
             pongCtx.ellipse(ball.x + ballSize/2, ball.y + ballSize/2, ballSize/2, ballSize/2, 0, 0, 2*Math.PI);
             pongCtx.fill();
-            // Scores
             pongCtx.font = "74px Arial";
             pongCtx.fillStyle = "#fff";
             pongCtx.fillText(playerScore, pongCanvas.width/4, 80);
             pongCtx.fillText(computerScore, 3*pongCanvas.width/4, 80);
         }
-
         function pongDrawGameOver() {
-            // Overlay
             pongCtx.fillStyle = "rgba(0,0,0,0.7)";
             pongCtx.fillRect(0, 0, pongCanvas.width, pongCanvas.height);
-            // Winner
             pongCtx.font = "74px Arial";
             pongCtx.fillStyle = "#fff";
             let winner = playerScore >= 10 ? "You Win!" : "Computer Wins!";
@@ -330,6 +681,348 @@
             pongCtx.fillText("Press SPACE to restart or ESC to quit", pongCanvas.width/2, pongCanvas.height/2 + 60);
             pongCtx.textAlign = "start";
         }
+
+        // --- Connect Four ---
+        let cf_ROWS = 6;
+        let cf_COLS = 7;
+        let cf_board = [];
+        let cf_buttons = [];
+        let cf_currentPlayer = 'O'; // 'O' (Human), 'X' (Computer)
+        let cf_gameActive = true;
+        function initConnectFour() {
+            cf_board = Array.from({ length: cf_ROWS }, () => Array(cf_COLS).fill(''));
+            let gridElem = document.getElementById('game-grid');
+            gridElem.innerHTML = '';
+            document.getElementById('status').textContent = "Your turn (O)";
+            cf_gameActive = true;
+            cf_buttons = [];
+            for (let r = 0; r < cf_ROWS; r++) {
+                cf_buttons[r] = [];
+                for (let c = 0; c < cf_COLS; c++) {
+                    const btn = document.createElement('button');
+                    btn.dataset.row = r;
+                    btn.dataset.col = c;
+                    btn.disabled = false;
+                    btn.onclick = (() => { return () => cf_playerMove(c); })();
+                    gridElem.appendChild(btn);
+                    cf_buttons[r][c] = btn;
+                }
+            }
+            if (Math.random() < 0.5) {
+                document.getElementById('status').textContent = "Computer starts!";
+                cf_disableButtons();
+                cf_currentPlayer = 'X';
+                setTimeout(cf_computerMove, 500);
+            } else {
+                cf_currentPlayer = 'O';
+                cf_enableButtons();
+            }
+        }
+        function cf_playerMove(col) {
+            if (!cf_gameActive || cf_currentPlayer !== 'O') return;
+            const row = cf_getNextOpenRow(col);
+            if (row === -1) return;
+            cf_placePiece(row, col, 'O');
+            if (cf_checkWin(row, col, 'O')) {
+                document.getElementById('status').textContent = "You Win!";
+                cf_endGame();
+                return;
+            }
+            if (cf_checkDraw()) {
+                document.getElementById('status').textContent = "It's a Draw!";
+                cf_endGame();
+                return;
+            }
+            cf_currentPlayer = 'X';
+            cf_disableButtons();
+            document.getElementById('status').textContent = "Computer's turn...";
+            setTimeout(cf_computerMove, 500);
+        }
+        function cf_computerMove() {
+            if (!cf_gameActive || cf_currentPlayer !== 'X') return;
+            const availableColumns = [];
+            for (let c = 0; c < cf_COLS; c++) {
+                if (cf_getNextOpenRow(c) !== -1) availableColumns.push(c);
+            }
+            if (availableColumns.length === 0) return;
+            const col = availableColumns[Math.floor(Math.random() * availableColumns.length)];
+            const row = cf_getNextOpenRow(col);
+            cf_placePiece(row, col, 'X');
+            if (cf_checkWin(row, col, 'X')) {
+                document.getElementById('status').textContent = "Computer Wins!";
+                cf_endGame();
+                return;
+            }
+            if (cf_checkDraw()) {
+                document.getElementById('status').textContent = "It's a Draw!";
+                cf_endGame();
+                return;
+            }
+            cf_currentPlayer = 'O';
+            cf_enableButtons();
+            document.getElementById('status').textContent = "Your turn (O)";
+        }
+        function cf_placePiece(row, col, piece) {
+            cf_board[row][col] = piece;
+            cf_buttons[row][col].textContent = piece;
+            cf_buttons[row][col].dataset.piece = piece;
+            cf_buttons[row][col].disabled = true;
+        }
+        function cf_getNextOpenRow(col) {
+            for (let r = cf_ROWS - 1; r >= 0; r--) {
+                if (cf_board[r][col] === '') {
+                    return r;
+                }
+            }
+            return -1;
+        }
+        function cf_checkWin(row, col, piece) {
+            for (let c = 0; c < cf_COLS - 3; c++) {
+                if (cf_board[row][c] === piece && cf_board[row][c + 1] === piece &&
+                    cf_board[row][c + 2] === piece && cf_board[row][c + 3] === piece) {
+                    return true;
+                }
+            }
+            for (let r = 0; r < cf_ROWS - 3; r++) {
+                if (cf_board[r][col] === piece && cf_board[r + 1][col] === piece &&
+                    cf_board[r + 2][col] === piece && cf_board[r + 3][col] === piece) {
+                    return true;
+                }
+            }
+            for (let r = 0; r < cf_ROWS - 3; r++) {
+                for (let c = 0; c < cf_COLS - 3; c++) {
+                    if (cf_board[r][c] === piece && cf_board[r + 1][c + 1] === piece &&
+                        cf_board[r + 2][c + 2] === piece && cf_board[r + 3][c + 3] === piece) {
+                        return true;
+                    }
+                }
+            }
+            for (let r = 3; r < cf_ROWS; r++) {
+                for (let c = 0; c < cf_COLS - 3; c++) {
+                    if (cf_board[r][c] === piece && cf_board[r - 1][c + 1] === piece &&
+                        cf_board[r - 2][c + 2] === piece && cf_board[r - 3][c + 3] === piece) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        function cf_checkDraw() {
+            for (let r = 0; r < cf_ROWS; r++) {
+                for (let c = 0; c < cf_COLS; c++) {
+                    if (cf_board[r][c] === '') return false;
+                }
+            }
+            return true;
+        }
+        function cf_endGame() {
+            cf_gameActive = false;
+            cf_disableButtons();
+        }
+        function cf_disableButtons() {
+            for (let r = 0; r < cf_ROWS; r++) {
+                for (let c = 0; c < cf_COLS; c++) {
+                    cf_buttons[r][c].disabled = true;
+                }
+            }
+        }
+        function cf_enableButtons() {
+            for (let r = 0; r < cf_ROWS; r++) {
+                for (let c = 0; c < cf_COLS; c++) {
+                    if (cf_board[r][c] === '') {
+                        cf_buttons[r][c].disabled = false;
+                    }
+                }
+            }
+        }
+        document.getElementById('restart').onclick = initConnectFour;
+
+        // --- Battleship ---
+        const SIZE = 8;
+        const SHIPS = [
+            { name: "Battleship", size: 4 },
+            { name: "Cruiser", size: 3 },
+            { name: "Submarine", size: 3 },
+            { name: "Destroyer", size: 2 }
+        ];
+        let playerBoard, computerBoard, playerShips, computerShips, battleshipActive, playerTurn, statusElem;
+
+        function createEmptyBoard() {
+            return Array.from({length: SIZE}, () => Array(SIZE).fill(0));
+        }
+
+        function placeShipsRandomly() {
+            let board = createEmptyBoard();
+            let ships = [];
+            for (let ship of SHIPS) {
+                let placed = false;
+                while (!placed) {
+                    let isHorizontal = Math.random() < 0.5;
+                    let row = Math.floor(Math.random() * (isHorizontal ? SIZE : SIZE - ship.size + 1));
+                    let col = Math.floor(Math.random() * (isHorizontal ? SIZE - ship.size + 1 : SIZE));
+                    let canPlace = true;
+                    for (let i = 0; i < ship.size; i++) {
+                        let r = row + (isHorizontal ? 0 : i);
+                        let c = col + (isHorizontal ? i : 0);
+                        if (board[r][c] !== 0) {
+                            canPlace = false;
+                            break;
+                        }
+                    }
+                    if (canPlace) {
+                        let coords = [];
+                        for (let i = 0; i < ship.size; i++) {
+                            let r = row + (isHorizontal ? 0 : i);
+                            let c = col + (isHorizontal ? i : 0);
+                            board[r][c] = ship.name[0];
+                            coords.push([r, c, false]);
+                        }
+                        ships.push({ name: ship.name, size: ship.size, coords });
+                        placed = true;
+                    }
+                }
+            }
+            return { board, ships };
+        }
+
+        function drawBoards() {
+            let playerBoardElem = document.getElementById('player-board');
+            playerBoardElem.innerHTML = '';
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+                    let cell = document.createElement('div');
+                    cell.className = 'cell';
+                    let val = playerBoard[r][c];
+                    if (typeof val === 'string' && val.match(/[BCSD]/)) cell.classList.add('ship');
+                    if (val === 'X') cell.classList.add('hit'), cell.textContent = '✕';
+                    if (val === 'O') cell.classList.add('miss'), cell.textContent = '•';
+                    playerShips.forEach(ship => {
+                        if (ship.coords.every(x => x[2])) {
+                            ship.coords.forEach(([rr, cc]) => {
+                                if (rr === r && cc === c) cell.classList.add('sunk');
+                            });
+                        }
+                    });
+                    playerBoardElem.appendChild(cell);
+                }
+            }
+            let computerBoardElem = document.getElementById('computer-board');
+            computerBoardElem.innerHTML = '';
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+                    let cell = document.createElement('div');
+                    cell.className = 'cell target';
+                    let val = computerBoard[r][c];
+                    if (val === 'X') cell.classList.add('hit'), cell.textContent = '✕', cell.classList.remove('target');
+                    if (val === 'O') cell.classList.add('miss'), cell.textContent = '•', cell.classList.remove('target');
+                    computerShips.forEach(ship => {
+                        if (ship.coords.every(x => x[2])) {
+                            ship.coords.forEach(([rr, cc]) => {
+                                if (rr === r && cc === c) {
+                                    cell.classList.add('sunk');
+                                    cell.textContent = '✕';
+                                    cell.classList.remove('target');
+                                }
+                            });
+                        }
+                    });
+                    if (battleshipActive && playerTurn && val !== 'X' && val !== 'O') {
+                        cell.onclick = () => playerFire(r, c);
+                    }
+                    computerBoardElem.appendChild(cell);
+                }
+            }
+        }
+
+        function playerFire(r, c) {
+            if (!battleshipActive || !playerTurn || computerBoard[r][c] === 'X' || computerBoard[r][c] === 'O') return;
+            let hit = false;
+            for (let ship of computerShips) {
+                for (let coord of ship.coords) {
+                    if (coord[0] === r && coord[1] === c && !coord[2]) {
+                        coord[2] = true;
+                        computerBoard[r][c] = 'X';
+                        hit = true;
+                        if (ship.coords.every(x => x[2])) {
+                            setBattleshipStatus(`You sank the computer's ${ship.name}!`);
+                        } else {
+                            setBattleshipStatus('Hit!');
+                        }
+                        break;
+                    }
+                }
+            }
+            if (!hit) {
+                computerBoard[r][c] = 'O';
+                setBattleshipStatus('Miss!');
+            }
+            drawBoards();
+            if (checkBattleshipWin(computerShips)) {
+                setBattleshipStatus('🎉 You win! All enemy ships sunk!');
+                battleshipActive = false;
+                return;
+            }
+            playerTurn = false;
+            setTimeout(computerMove, 800);
+        }
+
+        function computerMove() {
+            if (!battleshipActive) return;
+            let available = [];
+            for (let r = 0; r < SIZE; r++)
+                for (let c = 0; c < SIZE; c++)
+                    if (playerBoard[r][c] !== 'X' && playerBoard[r][c] !== 'O') available.push([r, c]);
+            if (available.length === 0) return;
+            let [r, c] = available[Math.floor(Math.random() * available.length)];
+            let hit = false;
+            for (let ship of playerShips) {
+                for (let coord of ship.coords) {
+                    if (coord[0] === r && coord[1] === c && !coord[2]) {
+                        coord[2] = true;
+                        playerBoard[r][c] = 'X';
+                        hit = true;
+                        setBattleshipStatus("Computer hit your ship!");
+                        break;
+                    }
+                }
+            }
+            if (!hit) {
+                playerBoard[r][c] = 'O';
+                setBattleshipStatus("Computer missed!");
+            }
+            drawBoards();
+            if (checkBattleshipWin(playerShips)) {
+                setBattleshipStatus('😢 Computer wins! All your ships sunk!');
+                battleshipActive = false;
+                return;
+            }
+            playerTurn = true;
+        }
+
+        function checkBattleshipWin(ships) {
+            return ships.every(ship => ship.coords.every(coord => coord[2]));
+        }
+
+        function setBattleshipStatus(msg) {
+            statusElem.textContent = msg;
+        }
+
+        function startBattleship() {
+            ({ board: playerBoard, ships: playerShips } = placeShipsRandomly());
+            ({ board: computerBoard, ships: computerShips } = placeShipsRandomly());
+            battleshipActive = true;
+            playerTurn = true;
+            statusElem = document.getElementById('battleship-status');
+            setBattleshipStatus("Your turn! Click a cell on the Computer's board to fire.");
+            drawBoards();
+        }
+
+        document.getElementById('battleship-restart').onclick = startBattleship;
+
+        // Show menu on load
+        window.onload = function() {
+            document.getElementById('menu').style.display = 'block';
+        };
     </script>
 </body>
 </html>
