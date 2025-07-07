@@ -14,7 +14,7 @@
             padding: 0;
             min-height: 100vh;
         }
-        #menu, #tictactoe, #pong, #connectfour, #battleship, #memorymatch {
+        #menu, #tictactoe, #pong, #connectfour, #battleship, #memorymatch, #gofish, #reversi {
             margin-top: 40px;
             display: none;
         }
@@ -296,6 +296,141 @@
             font-size: 1.1em;
             margin-bottom: 8px;
         }
+        /* Go Fish styles */
+        #gofish {
+          background: #1e4d2b;
+          color: #fff;
+        }
+        #gofish h1 { margin-top: 20px; }
+        #gofish .hand, #gofish .books {
+          margin: 18px 0;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        #gofish .card {
+          display: inline-block;
+          width: 50px; height: 70px;
+          background: #fff;
+          color: #1e4d2b;
+          border-radius: 8px;
+          border: 2px solid #2c7a3c;
+          margin: 5px;
+          font-size: 1.6em;
+          font-weight: bold;
+          line-height: 70px;
+          cursor: pointer;
+          transition: background 0.2s, color 0.2s;
+          user-select: none;
+        }
+        #gofish .card.selected {
+          background: #ffe66d;
+          color: #1e4d2b;
+          border-color: #d4b100;
+        }
+        #gofish #message, #gofish #books, #gofish #score {
+          margin: 14px 0;
+          font-size: 1.2em;
+        }
+        #gofish #computer-books, #gofish #player-books {
+          margin: 4px 0;
+          font-size: 1.1em;
+        }
+        #gofish button {
+          font-size: 1.1em;
+          padding: 8px 26px;
+          border-radius: 8px;
+          border: none;
+          background: #ffe66d;
+          color: #222;
+          margin: 8px 12px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        #gofish button:hover {
+          background: #fff6b0;
+        }
+        #gofish #deck-count {
+          margin-top: 8px;
+          font-size: 1.1em;
+          color: #ffe66d;
+        }
+        /* Reversi styles */
+        #reversi {
+          background: #28714a;
+          color: #fff;
+        }
+        #reversi h1 {
+          margin-top: 24px;
+        }
+        #reversi #game {
+          display: inline-block;
+          margin: 20px auto;
+        }
+        #reversi .board {
+          border: 3px solid #111;
+          background: #145c2c;
+          border-radius: 10px;
+          box-shadow: 0 4px 12px #2228;
+        }
+        #reversi .row {
+          display: flex;
+        }
+        #reversi .cell {
+          width: 48px;
+          height: 48px;
+          border: 1px solid #222;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2.2em;
+          cursor: pointer;
+          background: #28714a;
+          transition: background 0.2s;
+          position: relative;
+        }
+        #reversi .cell.valid {
+          background: #5ede8b;
+        }
+        #reversi .cell:hover.valid {
+          background: #43b56a;
+        }
+        #reversi .piece {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: inline-block;
+          box-shadow: 0 2px 6px #2225;
+        }
+        #reversi .piece.black {
+          background: #111;
+        }
+        #reversi .piece.white {
+          background: #fff;
+          border: 2px solid #bbb;
+        }
+        #reversi .controls {
+          margin-bottom: 10px;
+        }
+        #reversi #score {
+          margin: 12px 0;
+          font-size: 1.2em;
+        }
+        #reversi button {
+          background: #fff;
+          color: #145c2c;
+          border: none;
+          padding: 8px 16px;
+          font-size: 1em;
+          border-radius: 6px;
+          cursor: pointer;
+          margin-left: 20px;
+          transition: background 0.2s;
+        }
+        #reversi button:hover {
+          background: #5ede8b;
+          color: #111;
+        }
     </style>
 </head>
 <body>
@@ -307,8 +442,9 @@
         <button onclick="showGame('pong')">Ping Pong</button>
         <button onclick="showGame('connectfour')">Connect Four</button>
         <button onclick="showGame('battleship')">Battleship</button>
+        <button onclick="showGame('gofish')">Go Fish (Card Game)</button>
+        <button onclick="showGame('reversi')">Reversi / Othello</button>
     </div>
-
     <!-- Tic-Tac-Toe -->
     <div id="tictactoe">
         <h2>Tic Tac Toe: Human vs Computer</h2>
@@ -317,7 +453,6 @@
         <button onclick="resetTicTacToe()">Restart</button>
         <button onclick="backToMenu()">Back to Menu</button>
     </div>
-
     <!-- Memory Match -->
     <div id="memorymatch">
         <h2>Memory Match Game</h2>
@@ -327,7 +462,6 @@
         <button id="restart-memorymatch">Restart</button>
         <button onclick="backToMenu()">Back to Menu</button>
     </div>
-
     <!-- Pong -->
     <div id="pong">
         <h2>Ping Pong - Human vs Computer</h2>
@@ -339,7 +473,6 @@
         </div>
         <button onclick="backToMenu()">Back to Menu</button>
     </div>
-
     <!-- Connect Four -->
     <div id="connectfour">
         <div class="container">
@@ -352,7 +485,6 @@
             </div>
         </div>
     </div>
-
     <!-- Battleship -->
     <div id="battleship">
         <h2>Battleship</h2>
@@ -370,7 +502,37 @@
         <button id="battleship-restart">Restart</button>
         <button onclick="backToMenu()">Back to Menu</button>
     </div>
-
+    <!-- Go Fish Card Game -->
+    <div id="gofish">
+      <h1>Go Fish - Card Game</h1>
+      <div id="message"></div>
+      <div id="deck-count"></div>
+      <div>
+        <strong>Your Hand:</strong>
+        <div id="player-hand" class="hand"></div>
+      </div>
+      <div>
+        <strong>Your Books:</strong>
+        <div id="player-books" class="books"></div>
+      </div>
+      <div>
+        <strong>Computer's Books:</strong>
+        <div id="computer-books" class="books"></div>
+      </div>
+      <button id="restart-gofish">Restart</button>
+      <button onclick="backToMenu()">Back to Menu</button>
+    </div>
+    <!-- Reversi / Othello -->
+    <div id="reversi">
+      <h1>Reversi / Othello</h1>
+      <div id="game"></div>
+      <div class="controls">
+        <span id="turn"></span>
+        <button id="restart-reversi">Restart Game</button>
+        <button onclick="backToMenu()">Back to Menu</button>
+      </div>
+      <div id="score"></div>
+    </div>
     <script>
         // Menu navigation
         function showGame(game) {
@@ -1018,7 +1180,343 @@
         }
 
         document.getElementById('battleship-restart').onclick = startBattleship;
+        // ---Go Fish (Card Game)---
+        const GOFISH_RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+        let gofishDeck, gofishPlayerHand, gofishComputerHand, gofishPlayerBooks, gofishComputerBooks, gofishTurn, gofishGameOver;
 
+        function gofishMakeDeck() {
+            let d = [];
+            for (let r of GOFISH_RANKS) for (let s of [0,1,2,3]) d.push(r);
+            return gofishShuffle(d);
+        }
+        function gofishShuffle(arr) {
+            for (let i = arr.length-1; i > 0; i--) {
+            const j = Math.floor(Math.random()*(i+1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+        function gofishCountRank(hand, rank) { return hand.filter(c => c === rank).length; }
+        function gofishRemoveRank(hand, rank) {
+            const taken = hand.filter(c => c === rank);
+            const rest = hand.filter(c => c !== rank);
+            return [taken, rest];
+        }
+        function gofishHasBook(hand, rank) {
+            return gofishCountRank(hand, rank) === 4;
+        }
+        function gofishFindBooks(hand) {
+            let books = [];
+            for (let r of GOFISH_RANKS) if (gofishHasBook(hand, r)) books.push(r);
+            return books;
+        }
+        function gofishRemoveBooks(hand) {
+            let books = gofishFindBooks(hand);
+            let h = hand.slice();
+            for (let b of books) h = h.filter(c => c !== b);
+            return [h, books];
+        }
+        function gofishInitGame() {
+            gofishDeck = gofishMakeDeck();
+            gofishPlayerHand = gofishDeck.splice(0, 7);
+            gofishComputerHand = gofishDeck.splice(0, 7);
+            gofishPlayerBooks = [];
+            gofishComputerBooks = [];
+            gofishTurn = "player";
+            gofishGameOver = false;
+            gofishCheckBooks();
+            gofishRender();
+            gofishSetMessage("Your turn! Click a card rank to ask for.");
+        }
+        function gofishCheckBooks() {
+            let [pHand, pNewBooks] = gofishRemoveBooks(gofishPlayerHand);
+            let [cHand, cNewBooks] = gofishRemoveBooks(gofishComputerHand);
+            if (pNewBooks.length) gofishPlayerBooks.push(...pNewBooks);
+            if (cNewBooks.length) gofishComputerBooks.push(...cNewBooks);
+            gofishPlayerHand = pHand; gofishComputerHand = cHand;
+        }
+        function gofishGameEnd() {
+            gofishGameOver = true;
+            let result = "";
+            if (gofishPlayerBooks.length > gofishComputerBooks.length) result = "You win!";
+            else if (gofishPlayerBooks.length < gofishComputerBooks.length) result = "Computer wins!";
+            else result = "It's a tie!";
+            gofishSetMessage(`Game Over! ${result} (You: ${gofishPlayerBooks.length} | Computer: ${gofishComputerBooks.length})`);
+        }
+        function gofishDrawCard(hand) {
+            if (gofishDeck.length) hand.push(gofishDeck.pop());
+        }
+        function gofishPlayerAsk(rank) {
+            if (gofishGameOver || gofishTurn !== "player") return;
+            if (!gofishPlayerHand.includes(rank)) {
+            gofishSetMessage("You don't have that rank!");
+            return;
+            }
+            let [taken, newComputerHand] = gofishRemoveRank(gofishComputerHand, rank);
+            gofishComputerHand = newComputerHand;
+            if (taken.length) {
+            gofishPlayerHand.push(...taken);
+            gofishSetMessage(`Computer had ${taken.length} ${rank}(s)! You go again.`);
+            gofishCheckBooks();
+            gofishRender();
+            if (gofishPlayerHand.length === 0) {
+                if (gofishDeck.length) gofishDrawCard(gofishPlayerHand);
+                gofishCheckBooks(); gofishRender();
+                if (gofishPlayerHand.length === 0) gofishGameEnd();
+            }
+            } else {
+            gofishSetMessage("Go Fish! You draw a card.");
+            gofishDrawCard(gofishPlayerHand);
+            gofishCheckBooks();
+            gofishRender();
+            gofishTurn = "computer";
+            setTimeout(gofishComputerTurn, 800);
+            }
+            if (gofishPlayerBooks.length + gofishComputerBooks.length === 13) gofishGameEnd();
+        }
+        function gofishComputerTurn() {
+            if (gofishGameOver) return;
+            if (gofishComputerHand.length === 0) {
+            if (gofishDeck.length) gofishDrawCard(gofishComputerHand);
+            gofishCheckBooks(); gofishRender();
+            if (gofishComputerHand.length === 0) { gofishGameEnd(); return; }
+            }
+            let rank = gofishComputerHand[Math.floor(Math.random() * gofishComputerHand.length)];
+            let [taken, newPlayerHand] = gofishRemoveRank(gofishPlayerHand, rank);
+            gofishPlayerHand = newPlayerHand;
+            if (taken.length) {
+            gofishComputerHand.push(...taken);
+            gofishSetMessage(`Computer asks for ${rank}. You had ${taken.length}. Computer goes again.`);
+            gofishCheckBooks();
+            gofishRender();
+            if (gofishComputerBooks.length + gofishPlayerBooks.length === 13) { gofishGameEnd(); return; }
+            setTimeout(gofishComputerTurn, 900);
+            } else {
+            gofishSetMessage(`Computer asks for ${rank}. Go Fish!`);
+            gofishDrawCard(gofishComputerHand);
+            gofishCheckBooks();
+            gofishRender();
+            gofishTurn = "player";
+            if (gofishPlayerHand.length === 0) {
+                if (gofishDeck.length) gofishDrawCard(gofishPlayerHand);
+                gofishCheckBooks(); gofishRender();
+                if (gofishPlayerHand.length === 0) gofishGameEnd();
+            }
+            if (gofishComputerBooks.length + gofishPlayerBooks.length === 13) gofishGameEnd();
+            }
+        }
+        function gofishRender() {
+            let ph = document.getElementById('player-hand');
+            ph.innerHTML = '';
+            let seen = new Set();
+            for (let r of gofishPlayerHand) {
+            if (!seen.has(r)) {
+                let btn = document.createElement('div');
+                btn.className = 'card';
+                btn.textContent = r;
+                btn.onclick = () => gofishPlayerAsk(r);
+                ph.appendChild(btn);
+                seen.add(r);
+            }
+            }
+            document.getElementById('player-books').textContent = gofishPlayerBooks.join(' ');
+            document.getElementById('computer-books').textContent = gofishComputerBooks.join(' ');
+            document.getElementById('deck-count').textContent = `Deck: ${gofishDeck.length} cards`;
+        }
+        function gofishSetMessage(msg) {
+            document.getElementById('message').textContent = msg;
+        }
+
+        // --- Go Fish integration with menu/buttons ---
+        function showGoFish() {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('tictactoe').style.display = 'none';
+            document.getElementById('memorymatch').style.display = 'none';
+            document.getElementById('pong').style.display = 'none';
+            document.getElementById('connectfour').style.display = 'none';
+            document.getElementById('battleship').style.display = 'none';
+            document.getElementById('reversi').style.display = 'none';
+            document.getElementById('gofish').style.display = 'block';
+            gofishInitGame();
+        }
+        // Replace menu button to use showGoFish
+        document.querySelectorAll('#menu button').forEach(btn => {
+            if (btn.textContent.includes('Go Fish')) btn.onclick = showGoFish;
+        });
+        // Restart button
+        document.getElementById('restart-gofish').onclick = gofishInitGame;
+        // Back to menu button
+        document.querySelector('#gofish button[onclick*="backToMenu"]').onclick = function() {
+            document.getElementById('gofish').style.display = 'none';
+            document.getElementById('menu').style.display = 'block';
+        };
+        // --- Reversi / Othello ---
+        const REVERSI_SIZE = 8;
+        const EMPTY = 0, BLACK = 1, WHITE = 2;
+        const DIRS = [
+            [-1,-1],[-1,0],[-1,1],
+            [0,-1],       [0,1],
+            [1,-1],[1,0],[1,1]
+        ];
+        let reversiBoard, reversiTurn, reversiValidMoves, reversiGameOver;
+
+        function reversiInitBoard() {
+            reversiBoard = Array.from({length: REVERSI_SIZE}, _=> Array(REVERSI_SIZE).fill(EMPTY));
+            reversiBoard[3][3] = WHITE;
+            reversiBoard[4][4] = WHITE;
+            reversiBoard[3][4] = BLACK;
+            reversiBoard[4][3] = BLACK;
+            reversiTurn = BLACK; // Computer starts as Black
+            reversiGameOver = false;
+            reversiUpdateValidMoves();
+        }
+
+        function reversiInBounds(x, y) {
+            return x >= 0 && y >= 0 && x < REVERSI_SIZE && y < REVERSI_SIZE;
+        }
+        function reversiOpponent(p) {
+            return p === BLACK ? WHITE : BLACK;
+        }
+        function reversiIsValidMove(x, y, p) {
+            if (reversiBoard[x][y] !== EMPTY) return false;
+            for (const [dx, dy] of DIRS) {
+            let i = x + dx, j = y + dy, found = false;
+            while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(p)) {
+                i += dx; j += dy; found = true;
+            }
+            if (found && reversiInBounds(i, j) && reversiBoard[i][j] === p) return true;
+            }
+            return false;
+        }
+        function reversiGetValidMoves(p) {
+            const moves = [];
+            for (let x = 0; x < REVERSI_SIZE; ++x) for (let y = 0; y < REVERSI_SIZE; ++y)
+            if (reversiIsValidMove(x, y, p)) moves.push([x, y]);
+            return moves;
+        }
+        function reversiFlipPieces(x, y, p) {
+            for (const [dx, dy] of DIRS) {
+            let i = x + dx, j = y + dy, toFlip = [];
+            while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(p)) {
+                toFlip.push([i, j]);
+                i += dx; j += dy;
+            }
+            if (toFlip.length && reversiInBounds(i, j) && reversiBoard[i][j] === p)
+                for (const [fx, fy] of toFlip) reversiBoard[fx][fy] = p;
+            }
+        }
+        function reversiPlayMove(x, y, player) {
+            if (!reversiIsValidMove(x, y, player) || reversiGameOver) return false;
+            reversiBoard[x][y] = player;
+            reversiFlipPieces(x, y, player);
+            reversiTurn = reversiOpponent(player);
+            reversiUpdateValidMoves();
+            if (reversiValidMoves.length === 0) {
+            reversiTurn = reversiOpponent(reversiTurn);
+            reversiUpdateValidMoves();
+            if (reversiValidMoves.length === 0) {
+                reversiGameOver = true;
+                reversiRender();
+                return true;
+            }
+            }
+            reversiRender();
+            return true;
+        }
+        function reversiUpdateValidMoves() {
+            reversiValidMoves = reversiGetValidMoves(reversiTurn);
+        }
+        function reversiCountPieces() {
+            let black = 0, white = 0;
+            for (let x = 0; x < REVERSI_SIZE; ++x)
+            for (let y = 0; y < REVERSI_SIZE; ++y)
+                if (reversiBoard[x][y] === BLACK) black++;
+                else if (reversiBoard[x][y] === WHITE) white++;
+            return {black, white};
+        }
+        // Simple AI for computer (Black): pick a random valid move, prefer max flips
+        function reversiComputerMove() {
+            if (reversiTurn !== BLACK || reversiGameOver) return;
+            reversiUpdateValidMoves();
+            if (reversiValidMoves.length === 0) return;
+            let bestMoves = [], maxFlips = -1;
+            for (const [x, y] of reversiValidMoves) {
+            let flips = reversiCountFlips(x, y, BLACK);
+            if (flips > maxFlips) {
+                bestMoves = [[x, y]];
+                maxFlips = flips;
+            } else if (flips === maxFlips) {
+                bestMoves.push([x, y]);
+            }
+            }
+            const [x, y] = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+            reversiPlayMove(x, y, BLACK);
+            if (reversiTurn === BLACK && !reversiGameOver) setTimeout(reversiComputerMove, 300);
+        }
+        function reversiCountFlips(x, y, player) {
+            let total = 0;
+            for (const [dx, dy] of DIRS) {
+            let i = x + dx, j = y + dy, flips = 0;
+            while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(player)) {
+                flips++;
+                i += dx; j += dy;
+            }
+            if (flips && reversiInBounds(i, j) && reversiBoard[i][j] === player) total += flips;
+            }
+            return total;
+        }
+        function reversiHandleHumanMove(x, y) {
+            if (reversiTurn !== WHITE || reversiGameOver) return;
+            if (reversiPlayMove(x, y, WHITE)) {
+            if (reversiTurn === BLACK && !reversiGameOver) setTimeout(reversiComputerMove, 400);
+            }
+        }
+        function reversiRender() {
+            const gameDiv = document.getElementById('game');
+            gameDiv.innerHTML = '';
+            const boardDiv = document.createElement('div');
+            boardDiv.className = 'board';
+            // Make cells bigger by using inline style
+            for (let x = 0; x < REVERSI_SIZE; ++x) {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'row';
+            for (let y = 0; y < REVERSI_SIZE; ++y) {
+                const cellDiv = document.createElement('div');
+                cellDiv.className = 'cell';
+                cellDiv.style.width = "80px";
+                cellDiv.style.height = "80px";
+                if (reversiTurn === WHITE && reversiIsValidMove(x, y, WHITE) && !reversiGameOver)
+                cellDiv.classList.add('valid');
+                if (reversiBoard[x][y] === BLACK || reversiBoard[x][y] === WHITE) {
+                const piece = document.createElement('div');
+                piece.className = 'piece ' + (reversiBoard[x][y] === BLACK ? 'black':'white');
+                piece.style.width = "56px";
+                piece.style.height = "56px";
+                cellDiv.appendChild(piece);
+                }
+                cellDiv.onclick = () => reversiHandleHumanMove(x, y);
+                rowDiv.appendChild(cellDiv);
+            }
+            boardDiv.appendChild(rowDiv);
+            }
+            gameDiv.appendChild(boardDiv);
+
+            const {black, white} = reversiCountPieces();
+            document.getElementById('score').textContent =
+            `Computer (Black): ${black}   You (White): ${white}`;
+
+            let turnText = '';
+            if (reversiGameOver) {
+            if (black > white) turnText = 'Game Over! Computer (Black) wins!';
+            else if (white > black) turnText = 'Game Over! You (White) win!';
+            else turnText = 'Game Over! It\'s a tie!';
+            } else {
+            turnText = (reversiTurn === BLACK ? "Computer (Black)'s turn..." : "Your turn (White)");
+            if (reversiValidMoves.length === 0)
+                turnText += ' — No moves! Skipping turn...';
+            }
+            document.getElementById('turn').textContent = turnText;
+        }
         // Show menu on load
         window.onload = function() {
             document.getElementById('menu').style.display = 'block';
