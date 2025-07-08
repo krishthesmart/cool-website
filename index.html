@@ -6,431 +6,453 @@
     <title>Cool Website Games</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #222;
-            color: #fff;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
+        font-family: Arial, sans-serif;
+        background: #222;
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    #menu,
+    #tictactoe,
+    #pong,
+    #connectfour,
+    #battleship,
+    #memorymatch,
+    #gofish,
+    #reversi {
+        margin-top: 40px;
+        display: none; /* Ensures all games are initially hidden */
+    }
+
+    #menu {
+        display: block; /* Makes sure menu is the only thing shown initially */
+    }
+
+    button,
+    .ttt-cell {
+        font-size: 1.2em;
+        padding: 10px 20px;
+        margin: 10px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    button:hover,
+    .ttt-cell:hover {
+        background-color: #555;
+        color: #eee;
+    }
+
+    /*Tic Tac Toe*/
+    #tictactoe {
+        background: #3498db;
+    }
+
+    .ttt-board {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+        gap: 5px;
+        justify-content: center;
+        margin: 20px auto;
+    }
+
+    .ttt-cell {
+        width: 100px;
+        height: 100px;
+        background: #2980b9;
+        color: #fff;
+        font-size: 3em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        transition: background 0.2s;
+    }
+
+    .ttt-cell:hover {
+        background: #34495e;
+    }
+
+    #ttt-result {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    /*Pong*/
+    #pong {
+        background: #f39c12;
+    }
+
+    #pong-canvas {
+        background: #000;
+        display: block;
+        margin: 20px auto;
+        border: 2px solid #fff;
+    }
+
+    /*Connect Four*/
+    #connectfour {
+        background: #2ecc71;
+    }
+
+    #connectfour .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    #game-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 70px);
+        grid-template-rows: repeat(6, 70px);
+        gap: 5px;
+        margin-bottom: 15px;
+        background: #c0392b;
+        padding: 5px;
+        border-radius: 8px;
+    }
+
+    #connectfour button {
+        width: 70px;
+        height: 70px;
+        font-size: 2em;
+        cursor: pointer;
+        background: #34495e;
+        color: white;
+        border: 2px solid #c0392b;
+        border-radius: 50%;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    #connectfour button:hover {
+        background: #2c3e50;
+        transform: scale(1.05);
+    }
+
+    #connectfour button:disabled {
+        background: #7f8c8d;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    #connectfour button[data-piece="X"],
+    #connectfour button[data-piece="O"] {
+        color: #f1c40f;
+    }
+
+    #connectfour .cf-large-btn {
+        width: 200px;
+    }
+
+    /*Battleship*/
+    #battleship {
+        background: #9b59b6;
+    }
+
+    .boards-container {
+        display: flex;
+        justify-content: center;
+        gap: 48px;
+        margin: 24px 0;
+        flex-wrap: wrap;
+    }
+
+    .board-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .board-label {
+        margin-bottom: 8px;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .board {
+        display: grid;
+        grid-template-columns: repeat(8, 40px);
+        grid-template-rows: repeat(8, 40px);
+        gap: 3px;
+        background: #111;
+        border-radius: 8px;
+        padding: 5px;
+    }
+
+    .cell {
+        width: 40px;
+        height: 40px;
+        background: #333;
+        border-radius: 4px;
+        font-size: 1.5em;
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.18s, color 0.18s;
+    }
+
+    .cell.ship {
+        background: #2679ff;
+    }
+
+    .cell.hit {
+        background: #e74c3c;
+        color: #fff;
+        font-weight: bold;
+        animation: pop 0.28s;
+    }
+
+    .cell.miss {
+        background: #888;
+        color: #fff;
+        font-weight: bold;
+        animation: pop 0.18s;
+    }
+
+    .cell.target {
+        cursor: pointer;
+    }
+
+    .cell.sunk {
+        background: #2ecc40;
+        color: #fff;
+    }
+
+    @keyframes pop {
+        0% {
+            transform: scale(1);
         }
-        #menu, #tictactoe, #pong, #connectfour, #battleship, #memorymatch, #gofish, #reversi {
-            margin-top: 40px;
-            display: none;
+
+        50% {
+            transform: scale(1.25);
         }
-        #menu {
-            display: block;
+
+        100% {
+            transform: scale(1);
         }
-        button, .ttt-cell {
-            font-size: 1.2em;
-            padding: 10px 20px;
-            margin: 10px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
+    }
+
+    /*Memory Match*/
+    #memorymatch {
+        background: #e67e22;
+    }
+
+    #memory-board {
+        display: grid;
+        grid-template-columns: repeat(4, 100px);
+        grid-template-rows: repeat(4, 100px);
+        gap: 15px;
+        justify-content: center;
+        margin: 24px auto 16px auto;
+        max-width: 420px;
+    }
+
+    .card {
+        background: #d35400;
+        color: #d35400;
+        font-size: 3em;
+        border-radius: 12px;
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, color 0.2s, transform 0.1s;
+        height: 100px;
+        width: 100px;
+    }
+
+    .card.flipped,
+    .card.matched {
+        background: #3498db;
+        color: #fff;
+        cursor: default;
+        transform: scale(1.08);
+    }
+
+    .card.matched {
+        background: #2ecc40;
+        color: #fff;
+        cursor: default;
+        animation: pop 0.3s;
+    }
+
+    /*Go Fish*/
+    #gofish {
+        background: #16a085;
+    }
+
+    #gofish .card {
+        width: 70px;
+        height: 90px;
+    }
+
+    #gofish button {
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #gofish button:hover {
+        background-color: #f1c40f;
+        color: #333;
+    }
+    /*Reversi*/
+    #reversi {
+    background: #27ae60;
+    }
+
+    #reversi h2 {
+        margin-bottom: 12px;
+    }
+
+    #reversi #game-board {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px auto;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    #reversi .board {
+        border: 4px solid #1c2833;
+        background: #1e8449;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        margin: 0 auto;
+    }
+
+    #reversi .row {
+        display: flex;
+    }
+
+    #reversi .cell {
+        width: 60px;
+        height: 60px;
+        font-size: 2.5em;
+        border: 1px solid #1c2833;
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;  /* Added box-shadow transition */
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #reversi .cell.valid {
+        background: #5ede8b;
+        box-shadow: 0 0 8px #5ede8b; /* Added subtle glow for valid moves */
+    }
+
+    #reversi .cell:hover.valid {
+        background: #43b56a;
+        box-shadow: 0 0 12px #43b56a; /* Increased glow on hover */
+    }
+
+    #reversi .piece {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    #reversi .piece.black {
+        background: #111;
+        border: 1px solid #333;
+    }
+
+    #reversi .piece.white {
+        background: #fff;
+        border: 2px solid #ccc;
+    }
+
+    #reversi #score,
+    #reversi #reversi-status {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+        min-height: 1.6em;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        text-align: center;
+    }
+
+
+
+    /* General elements */
+    h1 {
+        color: #eee;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+        color: #ddd;
+        margin-bottom: 12px;
+    }
+
+    #status,
+    #battleship-status,
+    #moves,
+    #gofish #message,
+    #gofish #deck-count,
+    #reversi #score,
+    #reversi-status {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+        min-height: 1.6em;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    /*Responsive adjustments*/
+    @media (max-width: 768px) {
+        .boards-container {
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
         }
-        .ttt-board {
-            display: grid;
-            grid-template-columns: repeat(3, 80px);
-            grid-template-rows: repeat(3, 80px);
-            gap: 5px;
-            justify-content: center;
-            margin: 20px auto;
+
+        #game-grid {
+            grid-template-columns: repeat(7, 50px);
+            grid-template-rows: repeat(6, 50px);
         }
-        .ttt-cell {
+
+        #connectfour button {
+            width: 50px;
+            height: 50px;
+        }
+
+        .board {
+            grid-template-columns: repeat(8, 30px);
+            grid-template-rows: repeat(8, 30px);
+        }
+
+        .cell {
+            width: 30px;
+            height: 30px;
+        }
+
+        #memory-board {
+            grid-template-columns: repeat(4, 80px);
+            grid-template-rows: repeat(4, 80px);
+        }
+
+        .card {
             width: 80px;
             height: 80px;
-            background: #333;
-            color: #fff;
-            font-size: 2.5em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
         }
-        .ttt-cell:hover {
-            background: #444;
-        }
-        #pong-canvas {
-            background: #000;
-            display: block;
-            margin: 20px auto;
-            border: 2px solid #fff;
-        }
-        .hidden {
-            display: none !important;
-        }
-        /* Connect Four styles */
-        #connectfour .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        #game-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 60px);
-            grid-template-rows: repeat(6, 60px);
-            gap: 5px;
-            margin-bottom: 15px;
-            background: #FF0000;
-            padding: 5px;
-            border-radius: 8px;
-        }
-        #connectfour button {
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
-            cursor: pointer;
-            background: #444;
-            border: 2px solid #FF0000;
-            border-radius: 4px;
-            transition: background 0.2s, transform 0.2s;
-        }
-        #connectfour button:hover {
-            background: #555;
-            transform: scale(1.05);
-        }
-        #connectfour button:disabled {
-            background: #222;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        #status {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        #connectfour .cf-large-btn {
-            width: 200px;
-            height: 60px;
-            font-size: 1.5em;
-            padding: 16px 0;
-            margin: 14px 8px;
-            border-radius: 10px;
-            background: #555;
-            color: #fff;
-            border: none;
-            transition: background 0.2s, transform 0.2s;
-            cursor: pointer;
-            display: inline-block;
-        }
-        #connectfour .cf-large-btn:hover {
-            background: #777;
-            transform: scale(1.06);
-        }
-        #connectfour button[data-piece="X"],
-        #connectfour button[data-piece="O"] {
-            color: #00FF00;
-        }
-        #connectfour {
-            background: #0000FF;
-            color: #fff;
-            min-height: 100vh;
-            margin: 0;
-            padding-bottom: 40px;
-        }
-        /* Battleship styles */
-        #battleship h2 {
-            margin-bottom: 12px;
-        }
-        .boards-container {
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-            margin: 24px 0;
-            flex-wrap: wrap;
-        }
-        .board-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .board-label {
-            margin-bottom: 8px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-        .board {
-            display: grid;
-            grid-template-columns: repeat(8, 38px);
-            grid-template-rows: repeat(8, 38px);
-            gap: 3px;
-            background: #111;
-            border-radius: 8px;
-            padding: 5px;
-        }
-        .cell {
-            width: 38px;
-            height: 38px;
-            background: #333;
-            border-radius: 4px;
-            font-size: 1.5em;
-            cursor: pointer;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.18s, color 0.18s;
-        }
-        .cell.ship {
-            background: #2679ff;
-        }
-        .cell.hit {
-            background: #e74c3c;
-            color: #fff;
-            font-weight: bold;
-            animation: pop 0.28s;
-        }
-        .cell.miss {
-            background: #888;
-            color: #fff;
-            font-weight: bold;
-            animation: pop 0.18s;
-        }
-        .cell.target {
-            cursor: pointer;
-        }
-        .cell.sunk {
-            background: #2ecc40;
-            color: #fff;
-        }
-        @keyframes pop {
-            0% { transform: scale(1);}
-            50% { transform: scale(1.25);}
-            100% { transform: scale(1);}
-        }
-        #battleship-status {
-            font-size: 1.15em;
-            margin: 16px 0 12px 0;
-            min-height: 1.5em;
-        }
-        #battleship-restart {
-            font-size: 1.1em;
-            padding: 10px 34px;
-            margin: 16px 6px 8px 6px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            background: #0090ff;
-            color: #fff;
-            transition: background 0.2s;
-        }
-        #battleship-restart:hover {
-            background: #0077cc;
-        }
-        @media (max-width: 900px) {
-            .boards-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 18px;
-            }
-        }
-        /* Memory Match styles */
-        #memorymatch {
-            display: none;
-        }
-        #memorymatch h2 {
-            margin-top: 30px;
-            margin-bottom: 12px;
-        }
-        #memory-board {
-            display: grid;
-            grid-template-columns: repeat(4, 70px);
-            grid-template-rows: repeat(4, 70px);
-            gap: 15px;
-            justify-content: center;
-            margin: 24px auto 16px auto;
-            max-width: 370px;
-        }
-        .card {
-            background: #444;
-            color: #444;
-            font-size: 2.2em;
-            border-radius: 12px;
-            cursor: pointer;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s, color 0.2s, transform 0.1s;
-            height: 70px;
-            width: 70px;
-        }
-        .card.flipped, .card.matched {
-            background: #00bfff;
-            color: #fff;
-            cursor: default;
-            transform: scale(1.08);
-        }
-        .card.matched {
-            background: #2ecc40;
-            color: #fff;
-            cursor: default;
-            animation: pop 0.3s;
-        }
-        @keyframes pop {
-            0% { transform: scale(1.08);}
-            50% { transform: scale(1.25);}
-            100% { transform: scale(1.08);}
-        }
-        #status {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            min-height: 1.6em;
-        }
-        #restart-memorymatch {
-            font-size: 1.1em;
-            padding: 10px 34px;
-            margin-top: 12px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            background: #0090ff;
-            color: #fff;
-            transition: background 0.2s;
-        }
-        #restart-memorymatch:hover {
-            background: #0077cc;
-        }
-        #moves {
-            font-size: 1.1em;
-            margin-bottom: 8px;
-        }
-        /* Go Fish styles */
-        #gofish {
-          background: #1e4d2b;
-          color: #fff;
-        }
-        #gofish h1 { margin-top: 20px; }
-        #gofish .hand, #gofish .books {
-          margin: 18px 0;
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-        #gofish .card {
-          display: inline-block;
-          width: 50px; height: 70px;
-          background: #fff;
-          color: #1e4d2b;
-          border-radius: 8px;
-          border: 2px solid #2c7a3c;
-          margin: 5px;
-          font-size: 1.6em;
-          font-weight: bold;
-          line-height: 70px;
-          cursor: pointer;
-          transition: background 0.2s, color 0.2s;
-          user-select: none;
-        }
-        #gofish .card.selected {
-          background: #ffe66d;
-          color: #1e4d2b;
-          border-color: #d4b100;
-        }
-        #gofish #message, #gofish #books, #gofish #score {
-          margin: 14px 0;
-          font-size: 1.2em;
-        }
-        #gofish #computer-books, #gofish #player-books {
-          margin: 4px 0;
-          font-size: 1.1em;
-        }
-        #gofish button {
-          font-size: 1.1em;
-          padding: 8px 26px;
-          border-radius: 8px;
-          border: none;
-          background: #ffe66d;
-          color: #222;
-          margin: 8px 12px;
-          cursor: pointer;
-          transition: background 0.2s;
-        }
-        #gofish button:hover {
-          background: #fff6b0;
-        }
-        #gofish #deck-count {
-          margin-top: 8px;
-          font-size: 1.1em;
-          color: #ffe66d;
-        }
-        /* Reversi styles */
-        #reversi {
-          background: #28714a;
-          color: #fff;
-        }
-        #reversi h1 {
-          margin-top: 24px;
-        }
-        #reversi #game {
-          display: inline-block;
-          margin: 20px auto;
-        }
-        #reversi .board {
-          border: 3px solid #111;
-          background: #145c2c;
-          border-radius: 10px;
-          box-shadow: 0 4px 12px #2228;
-        }
-        #reversi .row {
-          display: flex;
-        }
+
         #reversi .cell {
-          width: 48px;
-          height: 48px;
-          border: 1px solid #222;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 2.2em;
-          cursor: pointer;
-          background: #28714a;
-          transition: background 0.2s;
-          position: relative;
+            width: 50px;
+            height: 50px;
         }
-        #reversi .cell.valid {
-          background: #5ede8b;
-        }
-        #reversi .cell:hover.valid {
-          background: #43b56a;
-        }
-        #reversi .piece {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          display: inline-block;
-          box-shadow: 0 2px 6px #2225;
-        }
-        #reversi .piece.black {
-          background: #111;
-        }
-        #reversi .piece.white {
-          background: #fff;
-          border: 2px solid #bbb;
-        }
-        #reversi .controls {
-          margin-bottom: 10px;
-        }
-        #reversi #score {
-          margin: 12px 0;
-          font-size: 1.2em;
-        }
-        #reversi button {
-          background: #fff;
-          color: #145c2c;
-          border: none;
-          padding: 8px 16px;
-          font-size: 1em;
-          border-radius: 6px;
-          cursor: pointer;
-          margin-left: 20px;
-          transition: background 0.2s;
-        }
-        #reversi button:hover {
-          background: #5ede8b;
-          color: #111;
-        }
+    }
+
     </style>
 </head>
 <body>
@@ -524,15 +546,14 @@
     </div>
     <!-- Reversi / Othello -->
     <div id="reversi">
-      <h1>Reversi / Othello</h1>
-      <div id="game"></div>
-      <div class="controls">
-        <span id="turn"></span>
-        <button id="restart-reversi">Restart Game</button>
+        <h2>Reversi / Othello</h2>
+        <div id="reversi-status"></div>
+        <div id="game-board"></div>
+        <div id="score"></div>
+        <button id="reversi-restart">Restart Game</button>
         <button onclick="backToMenu()">Back to Menu</button>
-      </div>
-      <div id="score"></div>
     </div>
+
     <script>
         // Menu navigation
         function showGame(game) {
@@ -542,12 +563,18 @@
             document.getElementById('pong').style.display = (game === 'pong') ? 'block' : 'none';
             document.getElementById('connectfour').style.display = (game === 'connectfour') ? 'block' : 'none';
             document.getElementById('battleship').style.display = (game === 'battleship') ? 'block' : 'none';
+            document.getElementById('gofish').style.display = (game === 'gofish') ? 'block' : 'none';
+            document.getElementById('reversi').style.display = (game === 'reversi') ? 'block' : 'none';
             if (game === 'pong') startPong();
             else stopPong();
             if (game === 'tictactoe') resetTicTacToe();
             if (game === 'memorymatch') createMemoryBoard();
             if (game === 'connectfour') initConnectFour();
             if (game === 'battleship') startBattleship();
+            if (game === 'reversi') {
+              document.getElementById('reversi').style.display = 'block';
+              startReversi();
+            }
         }
         function backToMenu() {
             document.getElementById('menu').style.display = 'block';
@@ -556,6 +583,8 @@
             document.getElementById('pong').style.display = 'none';
             document.getElementById('connectfour').style.display = 'none';
             document.getElementById('battleship').style.display = 'none';
+            document.getElementById('gofish').style.display = 'none';
+            document.getElementById('reversi').style.display = 'none';
             stopPong();
         }
 
@@ -864,7 +893,7 @@
                     const btn = document.createElement('button');
                     btn.dataset.row = r;
                     btn.dataset.col = c;
-                    btn.disabled = false;
+                                        btn.disabled = false;
                     btn.onclick = (() => { return () => cf_playerMove(c); })();
                     gridElem.appendChild(btn);
                     cf_buttons[r][c] = btn;
@@ -1350,7 +1379,7 @@
             document.getElementById('gofish').style.display = 'none';
             document.getElementById('menu').style.display = 'block';
         };
-        // --- Reversi / Othello ---
+         // --- Reversi / Othello ---
         const REVERSI_SIZE = 8;
         const EMPTY = 0, BLACK = 1, WHITE = 2;
         const DIRS = [
@@ -1360,13 +1389,20 @@
         ];
         let reversiBoard, reversiTurn, reversiValidMoves, reversiGameOver;
 
+        function startReversi() {
+            reversiInitBoard();
+            reversiRender();
+            setReversiStatus((reversiTurn === BLACK ? "Computer (Black)'s turn..." : "Your turn (White)"));
+            if (reversiTurn === BLACK) setTimeout(reversiComputerMove, 500); // Computer starts
+        }
+
         function reversiInitBoard() {
-            reversiBoard = Array.from({length: REVERSI_SIZE}, _=> Array(REVERSI_SIZE).fill(EMPTY));
+            reversiBoard = Array.from({ length: REVERSI_SIZE }, _ => Array(REVERSI_SIZE).fill(EMPTY));
             reversiBoard[3][3] = WHITE;
             reversiBoard[4][4] = WHITE;
             reversiBoard[3][4] = BLACK;
             reversiBoard[4][3] = BLACK;
-            reversiTurn = BLACK; // Computer starts as Black
+            reversiTurn = BLACK;
             reversiGameOver = false;
             reversiUpdateValidMoves();
         }
@@ -1374,37 +1410,46 @@
         function reversiInBounds(x, y) {
             return x >= 0 && y >= 0 && x < REVERSI_SIZE && y < REVERSI_SIZE;
         }
+
         function reversiOpponent(p) {
             return p === BLACK ? WHITE : BLACK;
         }
+
         function reversiIsValidMove(x, y, p) {
             if (reversiBoard[x][y] !== EMPTY) return false;
             for (const [dx, dy] of DIRS) {
-            let i = x + dx, j = y + dy, found = false;
-            while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(p)) {
-                i += dx; j += dy; found = true;
-            }
-            if (found && reversiInBounds(i, j) && reversiBoard[i][j] === p) return true;
+                let i = x + dx, j = y + dy, found = false;
+                while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(p)) {
+                    i += dx;
+                    j += dy;
+                    found = true;
+                }
+                if (found && reversiInBounds(i, j) && reversiBoard[i][j] === p) return true;
             }
             return false;
         }
+
         function reversiGetValidMoves(p) {
             const moves = [];
-            for (let x = 0; x < REVERSI_SIZE; ++x) for (let y = 0; y < REVERSI_SIZE; ++y)
-            if (reversiIsValidMove(x, y, p)) moves.push([x, y]);
+            for (let x = 0; x < REVERSI_SIZE; ++x)
+                for (let y = 0; y < REVERSI_SIZE; ++y)
+                    if (reversiIsValidMove(x, y, p)) moves.push([x, y]);
             return moves;
         }
+
         function reversiFlipPieces(x, y, p) {
             for (const [dx, dy] of DIRS) {
-            let i = x + dx, j = y + dy, toFlip = [];
-            while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(p)) {
-                toFlip.push([i, j]);
-                i += dx; j += dy;
-            }
-            if (toFlip.length && reversiInBounds(i, j) && reversiBoard[i][j] === p)
-                for (const [fx, fy] of toFlip) reversiBoard[fx][fy] = p;
+                let i = x + dx, j = y + dy, toFlip = [];
+                while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(p)) {
+                    toFlip.push([i, j]);
+                    i += dx;
+                    j += dy;
+                }
+                if (toFlip.length && reversiInBounds(i, j) && reversiBoard[i][j] === p)
+                    for (const [fx, fy] of toFlip) reversiBoard[fx][fy] = p;
             }
         }
+
         function reversiPlayMove(x, y, player) {
             if (!reversiIsValidMove(x, y, player) || reversiGameOver) return false;
             reversiBoard[x][y] = player;
@@ -1412,28 +1457,31 @@
             reversiTurn = reversiOpponent(player);
             reversiUpdateValidMoves();
             if (reversiValidMoves.length === 0) {
-            reversiTurn = reversiOpponent(reversiTurn);
-            reversiUpdateValidMoves();
-            if (reversiValidMoves.length === 0) {
-                reversiGameOver = true;
-                reversiRender();
-                return true;
-            }
+                reversiTurn = reversiOpponent(reversiTurn);
+                reversiUpdateValidMoves();
+                if (reversiValidMoves.length === 0) {
+                    reversiGameOver = true;
+                    reversiRender();
+                    return true;
+                }
             }
             reversiRender();
             return true;
         }
+
         function reversiUpdateValidMoves() {
             reversiValidMoves = reversiGetValidMoves(reversiTurn);
         }
+
         function reversiCountPieces() {
             let black = 0, white = 0;
             for (let x = 0; x < REVERSI_SIZE; ++x)
-            for (let y = 0; y < REVERSI_SIZE; ++y)
-                if (reversiBoard[x][y] === BLACK) black++;
-                else if (reversiBoard[x][y] === WHITE) white++;
-            return {black, white};
+                for (let y = 0; y < REVERSI_SIZE; ++y)
+                    if (reversiBoard[x][y] === BLACK) black++;
+                    else if (reversiBoard[x][y] === WHITE) white++;
+            return { black, white };
         }
+
         // Simple AI for computer (Black): pick a random valid move, prefer max flips
         function reversiComputerMove() {
             if (reversiTurn !== BLACK || reversiGameOver) return;
@@ -1441,82 +1489,94 @@
             if (reversiValidMoves.length === 0) return;
             let bestMoves = [], maxFlips = -1;
             for (const [x, y] of reversiValidMoves) {
-            let flips = reversiCountFlips(x, y, BLACK);
-            if (flips > maxFlips) {
-                bestMoves = [[x, y]];
-                maxFlips = flips;
-            } else if (flips === maxFlips) {
-                bestMoves.push([x, y]);
-            }
+                let flips = reversiCountFlips(x, y, BLACK);
+                if (flips > maxFlips) {
+                    bestMoves = [[x, y]];
+                    maxFlips = flips;
+                } else if (flips === maxFlips) {
+                    bestMoves.push([x, y]);
+                }
             }
             const [x, y] = bestMoves[Math.floor(Math.random() * bestMoves.length)];
             reversiPlayMove(x, y, BLACK);
             if (reversiTurn === BLACK && !reversiGameOver) setTimeout(reversiComputerMove, 300);
         }
+
         function reversiCountFlips(x, y, player) {
             let total = 0;
             for (const [dx, dy] of DIRS) {
-            let i = x + dx, j = y + dy, flips = 0;
-            while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(player)) {
-                flips++;
-                i += dx; j += dy;
-            }
-            if (flips && reversiInBounds(i, j) && reversiBoard[i][j] === player) total += flips;
+                let i = x + dx, j = y + dy, flips = 0;
+                while (reversiInBounds(i, j) && reversiBoard[i][j] === reversiOpponent(player)) {
+                    flips++;
+                    i += dx;
+                    j += dy;
+                }
+                if (flips && reversiInBounds(i, j) && reversiBoard[i][j] === player) total += flips;
             }
             return total;
         }
+
         function reversiHandleHumanMove(x, y) {
             if (reversiTurn !== WHITE || reversiGameOver) return;
             if (reversiPlayMove(x, y, WHITE)) {
-            if (reversiTurn === BLACK && !reversiGameOver) setTimeout(reversiComputerMove, 400);
+                if (reversiTurn === BLACK && !reversiGameOver) setTimeout(reversiComputerMove, 400);
             }
         }
+
         function reversiRender() {
-            const gameDiv = document.getElementById('game');
-            gameDiv.innerHTML = '';
+            const gameBoard = document.getElementById('game-board');
+            gameBoard.innerHTML = '';
             const boardDiv = document.createElement('div');
             boardDiv.className = 'board';
-            // Make cells bigger by using inline style
-            for (let x = 0; x < REVERSI_SIZE; ++x) {
-            const rowDiv = document.createElement('div');
-            rowDiv.className = 'row';
-            for (let y = 0; y < REVERSI_SIZE; ++y) {
-                const cellDiv = document.createElement('div');
-                cellDiv.className = 'cell';
-                cellDiv.style.width = "80px";
-                cellDiv.style.height = "80px";
-                if (reversiTurn === WHITE && reversiIsValidMove(x, y, WHITE) && !reversiGameOver)
-                cellDiv.classList.add('valid');
-                if (reversiBoard[x][y] === BLACK || reversiBoard[x][y] === WHITE) {
-                const piece = document.createElement('div');
-                piece.className = 'piece ' + (reversiBoard[x][y] === BLACK ? 'black':'white');
-                piece.style.width = "56px";
-                piece.style.height = "56px";
-                cellDiv.appendChild(piece);
-                }
-                cellDiv.onclick = () => reversiHandleHumanMove(x, y);
-                rowDiv.appendChild(cellDiv);
-            }
-            boardDiv.appendChild(rowDiv);
-            }
-            gameDiv.appendChild(boardDiv);
 
-            const {black, white} = reversiCountPieces();
-            document.getElementById('score').textContent =
-            `Computer (Black): ${black}   You (White): ${white}`;
+            for (let x = 0; x < REVERSI_SIZE; ++x) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'row';
+                for (let y = 0; y < REVERSI_SIZE; ++y) {
+                    const cellDiv = document.createElement('div');
+                    cellDiv.className = 'cell';
+                    cellDiv.dataset.x = x;
+                    cellDiv.dataset.y = y;
+
+                    if (reversiTurn === WHITE && reversiIsValidMove(x, y, WHITE) && !reversiGameOver) {
+                        cellDiv.classList.add('valid');
+                    }
+
+                    if (reversiBoard[x][y] === BLACK || reversiBoard[x][y] === WHITE) {
+                        const piece = document.createElement('div');
+                        piece.className = 'piece ' + (reversiBoard[x][y] === BLACK ? 'black' : 'white');
+                        cellDiv.appendChild(piece);
+                    }
+
+                    cellDiv.onclick = () => reversiHandleHumanMove(x, y);
+                    rowDiv.appendChild(cellDiv);
+                }
+                boardDiv.appendChild(rowDiv);
+            }
+            gameBoard.appendChild(boardDiv);
+
+            const { black, white } = reversiCountPieces();
+            document.getElementById('score').textContent = `Computer (Black): ${black}   You (White): ${white}`;
 
             let turnText = '';
             if (reversiGameOver) {
-            if (black > white) turnText = 'Game Over! Computer (Black) wins!';
-            else if (white > black) turnText = 'Game Over! You (White) win!';
-            else turnText = 'Game Over! It\'s a tie!';
+                if (black > white) turnText = 'Game Over! Computer (Black) wins!';
+                else if (white > black) turnText = 'Game Over! You (White) win!';
+                else turnText = 'Game Over! It\'s a tie!';
             } else {
-            turnText = (reversiTurn === BLACK ? "Computer (Black)'s turn..." : "Your turn (White)");
-            if (reversiValidMoves.length === 0)
-                turnText += ' — No moves! Skipping turn...';
+                turnText = (reversiTurn === BLACK ? "Computer (Black)'s turn..." : "Your turn (White)");
+                if (reversiValidMoves.length === 0)
+                    turnText += ' — No moves! Skipping turn...';
             }
-            document.getElementById('turn').textContent = turnText;
+            setReversiStatus(turnText);
         }
+
+        function setReversiStatus(msg) {
+            document.getElementById('reversi-status').textContent = msg;
+        }
+
+        document.getElementById('reversi-restart').onclick = startReversi;
+        
         // Show menu on load
         window.onload = function() {
             document.getElementById('menu').style.display = 'block';
@@ -1524,3 +1584,4 @@
     </script>
 </body>
 </html>
+
